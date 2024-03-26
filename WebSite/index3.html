@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Scheduling Algorihtms</title>
+    <meta name="description" content="Prism is a beautiful Bootstrap 4 template for open-source landing pages."/>
+
+    <!--Google font-->
+    <link href="https://fonts.googleapis.com/css?family=K2D:300,400,500,700,800" rel="stylesheet">
+
+    <!-- Bootstrap CSS / Color Scheme -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+
+<!--Header Section-->
+<section class="bg-gradient pt-5 pb-6">
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-12 d-flex flex-row align-items-center justify-content-between">
+                <a href="index.html"><div class="heading-brand btn btn-dark">Task - 1</div></a>
+                <a href="index2.html"><div class="heading-brand btn btn-dark">Task - 2</div></a>
+                <a href="index3.html"><div class="heading-brand btn btn-dark">Task - 3</div></a>
+                <a href="index4.html"><div class="heading-brand btn btn-dark">Task - 4</div></a>
+                <!-- <a href="" class="btn btn-dark" target="_blank">Start</a> -->
+            </div>
+        </div>
+        <div class="row mt-6">
+            <div class="col-md-8 mx-auto text-center">
+                <h1>Round Robin(RR) Scheduling Algorihtm
+                </h1>
+                <p class="lead mb-5">"
+                    Round Robin is a scheduling algorithm commonly employed in operating systems. It operates on the principle of time slicing, where each process is assigned a fixed time quantum for execution on the CPU. Processes are arranged in a queue, and the CPU switches between processes when their time quantum expires or when they voluntarily yield the CPU."</p>
+                
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-9 mx-auto">
+                <div class="code-window">
+                    <div class="dots">
+                        <div class="red"></div>
+                        <div class="orange"></div>
+                        <div class="green"></div>
+                    </div>
+                    <pre class="language-javascript line-numbers"><code class="language-javascript">
+#include&lt;iostream&gt;
+#include&lt;vector&gt;
+#include&lt;algorithm&gt;
+#include&lt;iomanip&gt;
+
+using namespace std;
+
+struct Process {
+    int pid;
+    int art;
+    int bt;
+    int remaining_time;
+    int wt;
+    int tat;
+};
+
+void round_robin_scheduling(vector<Process>& processes, int time_quantum) {
+    int n = processes.size();
+    int current_time = 0;
+    vector<int> remaining_bt(n, 0);
+    vector<bool> is_completed(n, false);
+
+    for (int i = 0; i < n; i++) {
+        remaining_bt[i] = processes[i].bt;
+    }
+
+    int completed_processes = 0;
+    int index = 0;
+    bool is_first_process = true;
+
+    cout << "Gantt Chart:\n";
+
+    while (completed_processes != n) {
+        bool is_cpu_idle = true;
+        for (int i = 0; i < n; i++) {
+            if (processes[i].art <= current_time && !is_completed[i]) {
+                is_cpu_idle = false;
+                if (is_first_process) {
+                    cout << "| " << setw(2) << processes[i].pid << " ";
+                    is_first_process = false;
+                } else {
+                    cout << "| " << setw(2) << processes[i].pid << " ";
+                }
+                if (remaining_bt[i] > time_quantum) {
+                    current_time += time_quantum;
+                    remaining_bt[i] -= time_quantum;
+                } else {
+                    current_time += remaining_bt[i];
+                    processes[i].wt = current_time - processes[i].bt - processes[i].art;
+                    processes[i].tat = processes[i].wt + processes[i].bt;
+                    remaining_bt[i] = 0;
+                    is_completed[i] = true;
+                    completed_processes++;
+                }
+            }
+        }
+
+        if (is_cpu_idle) {
+            current_time++;
+            cout << "| -- ";
+        }
+    }
+    cout << "|\n";
+}
+
+void print_results(vector<Process>& processes) {
+    cout << "P\t\tBT\tWT\tTAT\n";
+    float total_wt = 0, total_tat = 0;
+    for (int i = 0; i < processes.size(); i++) {
+        cout << processes[i].pid << "\t\t" << processes[i].bt << "\t" << processes[i].wt << "\t" << processes[i].tat << endl;
+        total_wt += processes[i].wt;
+        total_tat += processes[i].tat;
+    }
+    cout << "\nAverage Waiting Time: " << total_wt / processes.size() << endl;
+    cout << "Average Turnaround Time: " << total_tat / processes.size() << endl;
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of processes: ";
+    cin >> n;
+
+    vector<Process> processes(n);
+    cout << "Insert the process information\n";
+    for (int i = 0; i < n; i++) {
+        cout << "Enter the process id: ";
+        cin >> processes[i].pid;
+        cout << "Enter the arrival time: ";
+        cin >> processes[i].art;
+        cout << "Enter the burst time: ";
+        cin >> processes[i].bt;
+        processes[i].remaining_time = processes[i].bt;
+        processes[i].wt = 0;
+        processes[i].tat = 0;
+    }
+
+    int time_quantum;
+    cout << "Enter the time quantum: ";
+    cin >> time_quantum;
+
+    round_robin_scheduling(processes, time_quantum);
+    print_results(processes);
+
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--Features Section-->
+<section class="py-6 text-center">
+    <h1 class="my-4">Round Robin Scheduling</h1>
+    <div class="my-3">
+        <label class="form-label" for="numProcesses">Enter the number of processes</label>
+        <input class="form-control" type="number" id="numProcesses" style="width: 350px; margin: auto;">
+        <button class="btn btn-dark my-3" onclick="getProcessInfo()">Submit</button>
+    </div>
+    <!-- ------- -->
+    <div id="processInfo" class="container" style="display: none;">
+        <table class="table container table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Sr.no</th>
+                    <th scope="col">Process ID</th>
+                    <th scope="col">Arrival Time</th>
+                    <th scope="col">Burst Time</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+        <div id="display-btn"></div>
+    </div>
+    <!-- --------------- -->
+    <div class="my-3" id="timeQuantum-div" style="display: none;">
+        <label class="form-label" for="timeQuantum">Enter the time quantum</label>
+        <input class="form-control" type="number" id="timeQuantum" style="width: 350px; margin: auto;">
+        <button class="btn btn-dark my-3" onclick="performRoundRobin()">Run Round Robin Scheduling</button>
+    </div>
+    <div id="results" style="max-width: 1000px; margin: auto;"></div>
+
+    <script>
+        class Process {
+            constructor(pid, art, bt) {
+                this.pid = pid;
+                this.art = art;
+                this.bt = bt;
+                this.remaining_time = bt;
+                this.wt = 0;
+                this.tat = 0;
+            }
+        }
+
+        let processes = [];
+
+        function getProcessInfo() {
+            document.getElementById("processInfo").style.display = "block";
+
+            const numProcesses = parseInt(document.getElementById('numProcesses').value);
+            let processInfoHTML = '';
+            for (let i = 0; i < numProcesses; i++) {
+                processInfoHTML += `
+                <tr>
+                    <th scope="row">${i + 1}</th>
+                    <td><input class="form-control" type="number" id="pid${i}"></td>
+                    <td><input class="form-control" type="number" id="art${i}"></td>
+                    <td><input class="form-control" type="number" id="bt${i}"></td>
+                </tr>
+            `;
+            }
+            document.getElementById("display-btn").innerHTML = '<button class="btn btn-dark my-3" onclick="storeProcessInfo()">Submit</button>'
+            document.getElementById('table-body').innerHTML = processInfoHTML;
+        }
+
+        function storeProcessInfo() {
+            document.getElementById("timeQuantum-div").style.display = "block"
+            processes = [];
+            const numProcesses = parseInt(document.getElementById('numProcesses').value);
+            for (let i = 0; i < numProcesses; i++) {
+                const pid = parseInt(document.getElementById(`pid${i}`).value);
+                const art = parseInt(document.getElementById(`art${i}`).value);
+                const bt = parseInt(document.getElementById(`bt${i}`).value);
+                processes.push(new Process(pid, art, bt));
+            }
+        }
+
+        function performRoundRobin() {
+            const timeQuantum = parseInt(document.getElementById('timeQuantum').value);
+            let current_time = 0;
+            let remaining_bt = new Array(processes.length).fill(0);
+            let is_completed = new Array(processes.length).fill(false);
+
+            for (let i = 0; i < processes.length; i++) {
+                remaining_bt[i] = processes[i].bt;
+            }
+
+            let completed_processes = 0;
+
+            let ganttChart = '';
+            let ganttChartTime = [0]
+
+            while (completed_processes != processes.length) {
+                let is_cpu_idle = true;
+                for (let i = 0; i < processes.length; i++) {
+                    if (processes[i].art <= current_time && !is_completed[i]) {
+                        is_cpu_idle = false;
+                        if (ganttChart === '') {
+                            ganttChart += `<th scope="col">${processes[i].pid}</th>`;
+                        } else {
+                            ganttChart += `<th scope="col">${processes[i].pid}</th>`;
+                        }
+                        if (remaining_bt[i] > timeQuantum) {
+                            current_time += timeQuantum;
+                            ganttChartTime.push(current_time)
+                            remaining_bt[i] -= timeQuantum;
+                        } else {
+                            current_time += remaining_bt[i];
+                            ganttChartTime.push(current_time)
+                            processes[i].wt = current_time - processes[i].bt - processes[i].art;
+                            processes[i].tat = processes[i].wt + processes[i].bt;
+                            remaining_bt[i] = 0;
+                            is_completed[i] = true;
+                            completed_processes++;
+                        }
+                    }
+                }
+
+                if (is_cpu_idle) {
+                    current_time++;
+                    ganttChartTime.push(current_time)
+                    ganttChart += '<th scope="col">--</th>';
+                }
+            }
+            console.log(ganttChartTime)
+            let ganttChartTimeVar = ''
+            for (i = 0; i < ganttChartTime.length - 1; i++) {
+                ganttChartTimeVar += `<td>${ganttChartTime[i]}-${ganttChartTime[i + 1]}</td>`
+            }
+            document.getElementById('results').innerHTML = `<h2>Gantt Chart:</h2><table class="table table-bordered"><thead>${ganttChart}</thead><tr>${ganttChartTimeVar}</tr></table>`;
+            printResults(processes);
+        }
+
+        function printResults(processes) {
+            let resultHTML = '<h2>Results:</h2>';
+            resultHTML += '<table class="table table-bordered">';
+            resultHTML += '<tr><th>P</th><th>BT</th><th>WT</th><th>TAT</th></tr>';
+            let total_wt = 0, total_tat = 0;
+            for (let i = 0; i < processes.length; i++) {
+                resultHTML += `<tr><td>${processes[i].pid}</td><td>${processes[i].bt}</td><td>${processes[i].wt}</td><td>${processes[i].tat}</td></tr>`;
+                total_wt += processes[i].wt;
+                total_tat += processes[i].tat;
+            }
+            resultHTML += '</table>';
+            resultHTML += `<p>Average Waiting Time:<b> ${total_wt / processes.length}</b></p>`;
+            resultHTML += `<p>Average Turnaround Time:<b> ${total_tat / processes.length}</b></p>`;
+            document.getElementById('results').innerHTML += resultHTML;
+        }
+    </script>
+</section>
+
+<!--footer-->
+<footer class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="">Deep Mathukiya</a></li>
+                    <li class="list-inline-item"><a href="">Darshil Padmani</a></li>
+                    <li class="list-inline-item"><a href="">Kashyap Vekariya</a></li>
+                    <li class="list-inline-item"><a href="">Jenil Patel</a></li>
+                    <li class="list-inline-item"><a href="">Dhairya Savaliya</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row my-2">
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.7.3/feather.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<script src="js/scripts.js"></script>
+</body>
+</html>

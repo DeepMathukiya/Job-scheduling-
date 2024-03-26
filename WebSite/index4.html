@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Scheduling Algorihtms</title>
+    <meta name="description" content="Prism is a beautiful Bootstrap 4 template for open-source landing pages." />
+
+    <!--Google font-->
+    <link href="https://fonts.googleapis.com/css?family=K2D:300,400,500,700,800" rel="stylesheet">
+
+    <!-- Bootstrap CSS / Color Scheme -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <!--Header Section-->
+    <section class="bg-gradient pt-5 pb-6">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12 d-flex flex-row align-items-center justify-content-between">
+                    <a href="index.html">
+                        <div class="heading-brand btn btn-dark">Task - 1</div>
+                    </a>
+                    <a href="index2.html">
+                        <div class="heading-brand btn btn-dark">Task - 2</div>
+                    </a>
+                    <a href="index3.html">
+                        <div class="heading-brand btn btn-dark">Task - 3</div>
+                    </a>
+                    <a href="index4.html">
+                        <div class="heading-brand btn btn-dark">Task - 4</div>
+                    </a>
+                    <!-- <a href="" class="btn btn-dark" target="_blank">Start</a> -->
+                </div>
+            </div>
+            <div class="row mt-6">
+                <div class="col-md-8 mx-auto text-center">
+                    <h1>priority Premtive Scheduling Algorihtm
+                    </h1>
+                    <p class="lead mb-5">"
+                        Priority Preemptive Scheduling is a scheduling algorithm used in operating systems to determine
+                        the order in which processes are executed on the CPU. Each process is assigned a priority value,
+                        which can be based on factors such as the importance of the task, its deadline, or its resource
+                        requirements. In this algorithm, the process with the highest priority is given access to the
+                        CPU first."</p>
+
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-9 mx-auto">
+                    <div class="code-window">
+                        <div class="dots">
+                            <div class="red"></div>
+                            <div class="orange"></div>
+                            <div class="green"></div>
+                        </div>
+                        <pre class="language-javascript line-numbers"><code class="language-javascript">
+#include&lt;iostream&gt;
+
+using namespace std;
+
+struct Process {
+    int pid;
+    int art;
+    int bt;
+    int priority; 
+};
+
+void findTAT(Process proc[], int n, int tat[])
+{
+    int rt[n]; 
+    int complete = 0, t = 0, shortest = 0;
+    bool check = false;
+
+    for (int i = 0; i < n; i++) {
+        rt[i] = proc[i].bt;
+    }
+
+    while (complete != n) {
+        int minm = 999, min_priority = 999; // Initialize with a high value
+        for (int j = 0; j < n; j++) {
+            if ((proc[j].art <= t) && (rt[j] > 0) && (proc[j].priority < min_priority)) {
+                minm = rt[j];
+                min_priority = proc[j].priority;
+                shortest = j;
+                check = true;
+            }
+        }
+
+        if (check == false) {
+            cout << "| \t";
+            t++;
+            continue;
+        }
+
+        rt[shortest]--;
+        minm = rt[shortest];
+        if (minm == 0) {
+            minm = 999;
+            complete++;
+            check = false;
+            int finish_time = t + 1;
+            tat[shortest] = finish_time - proc[shortest].art;
+            if (tat[shortest] < 0)
+                tat[shortest] = 0;
+        }
+
+        cout << "|" << proc[shortest].pid << "\t";
+        t++;
+    }
+
+    cout << "\n";
+}
+
+void findWT(Process proc[], int n, int tat[], int wt[])
+{
+    for (int i = 0; i < n; i++)
+        wt[i] = tat[i] - proc[i].bt;
+}
+
+void findavgTime(Process proc[], int n)
+{
+    int wt[n], tat[n], total_wt = 0, total_tat = 0;
+
+    findTAT(proc, n, tat);
+    findWT(proc, n, tat, wt);
+
+    cout << "P\t\t"
+            << "BT \t\t"
+            << "WT \t\t"
+            << "TAT \t\t \n";
+
+    for (int i = 0; i < n; i++) {
+        total_wt = total_wt + wt[i];
+        total_tat = total_tat + tat[i];
+        cout << " " << proc[i].pid << "\t\t"
+                << proc[i].bt << "\t\t " << wt[i]
+                << "\t\t " << tat[i] << endl;
+    }
+
+    cout << "\nAverage waiting time = "
+            << (float)total_wt / (float)n;
+    cout << "\nAverage turn around time = "
+            << (float)total_tat / (float)n;
+}
+
+int main()
+{
+    int n;
+    cout << "Enter the number of processes: ";
+    cin >> n;
+    cout << "Insert the process information\n";
+    Process proc[n];
+
+    for (int i = 0; i < n; i++) {
+        cout << "Enter the process id: ";
+        cin >> proc[i].pid;
+        cout << "Enter the arrival time: ";
+        cin >> proc[i].art;
+        cout << "Enter the burst time: ";
+        cin >> proc[i].bt;
+        cout << "Enter the priority: "; 
+        cin >> proc[i].priority;
+    }
+
+    findavgTime(proc, n);
+
+    return 0;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Priority Preemptive Scheduling Section -->
+    <section class="py-6 text-center">
+        <h1 class="my-4">Priority Scheduling</h1>
+        <div class="my-3">
+            <label class="form-label" for="numProcesses">Enter the number of processes</label>
+            <input class="form-control" type="number" id="numProcesses" style="width: 350px; margin: auto;">
+            <button class="btn btn-dark my-3" onclick="getProcessInfo()">Submit</button>
+        </div>
+        <!-- ------- -->
+        <div id="processInfo" class="container" style="display: none;">
+            <table class="table container table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr.no</th>
+                        <th scope="col">Process ID</th>
+                        <th scope="col">Arrival Time</th>
+                        <th scope="col">Burst Time</th>
+                        <th scope="col">Priority</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+            <div id="display-btn"></div>
+        </div>
+        <!-- --------------- -->
+        <div id="results" style="max-width: 1000px; margin: auto;"></div>
+
+        <script>
+            class Process {
+                constructor(pid, art, bt, priority) {
+                    this.pid = pid;
+                    this.art = art;
+                    this.bt = bt;
+                    this.priority = priority;
+                    this.remaining_time = bt;
+                    this.wt = 0;
+                    this.tat = 0;
+                }
+            }
+
+            let processes = [];
+
+            function getProcessInfo() {
+                document.getElementById("processInfo").style.display = "block";
+
+                const numProcesses = parseInt(document.getElementById('numProcesses').value);
+                let processInfoHTML = '';
+                for (let i = 0; i < numProcesses; i++) {
+                    processInfoHTML += `
+                <tr>
+                    <th scope="row">${i + 1}</th>
+                    <td><input class="form-control" type="number" id="pid${i}"></td>
+                    <td><input class="form-control" type="number" id="art${i}"></td>
+                    <td><input class="form-control" type="number" id="bt${i}"></td>
+                    <td><input class="form-control" type="number" id="priority${i}"></td>
+                </tr>
+            `;
+                }
+                document.getElementById("display-btn").innerHTML = '<button class="btn btn-dark my-3" onclick="storeProcessInfo()">Submit</button>'
+                document.getElementById('table-body').innerHTML = processInfoHTML;
+            }
+            function storeProcessInfo() {
+                processes = [];
+                const numProcesses = parseInt(document.getElementById('numProcesses').value);
+                for (let i = 0; i < numProcesses; i++) {
+                    const pid = parseInt(document.getElementById(`pid${i}`).value);
+                    const art = parseInt(document.getElementById(`art${i}`).value);
+                    const bt = parseInt(document.getElementById(`bt${i}`).value);
+                    const priority = parseInt(document.getElementById(`priority${i}`).value);
+                    processes.push(new Process(pid, art, bt, priority));
+                }
+                performPriorityScheduling();
+            }
+            function findTAT(processes) {
+                const n = processes.length;
+                const rt = processes.map(proc => proc.bt); 
+                let complete = 0, t = 0, shortest = 0, check = false;
+                const ganttChart = [];
+                while (complete !== n) {
+                    let minm = 999, min_priority = 999; 
+                    for (let j = 0; j < n; j++) {
+                        if ((processes[j].art <= t) && (rt[j] > 0) && (processes[j].priority < min_priority)) {
+                            minm = rt[j];
+                            min_priority = processes[j].priority;
+                            shortest = j;
+                            check = true;
+                        }
+                    }
+                    if (check === false) {
+                        ganttChart.push('--');
+                        t++;
+                        continue;
+                    }
+                    rt[shortest]--;
+                    minm = rt[shortest];
+                    if (minm === 0) {
+                        minm = 999;
+                        complete++;
+                        check = false;
+                        const finish_time = t + 1;
+                        processes[shortest].tat = finish_time - processes[shortest].art;
+                        if (processes[shortest].tat < 0)
+                            processes[shortest].tat = 0;
+                    }
+                    ganttChart.push(processes[shortest].pid);
+                    t++;
+                }
+                return ganttChart;
+            }
+            function findWT(processes) {
+                for (let i = 0; i < processes.length; i++)
+                    processes[i].wt = processes[i].tat - processes[i].bt;
+            }
+            function findavgTime(processes) {
+                const n = processes.length;
+                const ganttChart = findTAT(processes);
+                findWT(processes);
+                let total_wt = 0, total_tat = 0;
+                const results = [];
+                for (let i = 0; i < n; i++) {
+                    total_wt += processes[i].wt;
+                    total_tat += processes[i].tat;
+                    results.push({
+                        pid: processes[i].pid,
+                        bt: processes[i].bt,
+                        wt: processes[i].wt,
+                        tat: processes[i].tat
+                    });
+                }
+                const avg_wt = total_wt / n;
+                const avg_tat = total_tat / n;
+
+                return { ganttChart, results, avg_wt, avg_tat };
+            }
+            function performPriorityScheduling() {
+                const { ganttChart, results, avg_wt, avg_tat } = findavgTime(processes);
+                let resultHTML = '<h2>Gantt Chart:</h2>';
+                resultHTML += '<table class="table table-bordered">';
+                resultHTML += `<tr><td>${ganttChart.join('</td><td>')}</td></tr>`;
+                resultHTML += '</table>';
+                resultHTML += '<h2>Results:</h2>';
+                resultHTML += '<table class="table table-bordered">';
+                resultHTML += '<tr><th>P</th><th>BT</th><th>WT</th><th>TAT</th></tr>';
+                for (const result of results) {
+                    resultHTML += `<tr><td>${result.pid}</td><td>${result.bt}</td><td>${result.wt}</td><td>${result.tat}</td></tr>`;
+                }
+                resultHTML += '</table>';
+                resultHTML += `<p>Average Waiting Time:<b> ${avg_wt}</b></p>`;
+                resultHTML += `<p>Average Turnaround Time:<b> ${avg_tat}</b></p>`;
+                document.getElementById('results').innerHTML = resultHTML;
+            }
+        </script>
+    </section>
+    <!--footer-->
+    <footer class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a href="">Deep Mathukiya</a></li>
+                        <li class="list-inline-item"><a href="">Darshil Padmani</a></li>
+                        <li class="list-inline-item"><a href="">Kashyap Vekariya</a></li>
+                        <li class="list-inline-item"><a href="">Jenil Patel</a></li>
+                        <li class="list-inline-item"><a href="">Dhairya Savaliya</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row my-2">
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.7.3/feather.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="js/scripts.js"></script>
+</body>
+
+</html>
